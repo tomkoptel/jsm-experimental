@@ -23,10 +23,13 @@ import java.util.List;
 public class TestPagerAdapter extends FragmentPagerAdapter {
     private final List<Fragment> fragments = new ArrayList<>();
     private final List<Integer> pages = new ArrayList<>();
+    private final FragmentCreator<? extends Fragment, Integer> mCreator;
     private int mCount;
 
-    public TestPagerAdapter(FragmentManager fragmentManager) {
+    public TestPagerAdapter(FragmentManager fragmentManager,
+                            FragmentCreator<? extends Fragment, Integer> creator) {
         super(fragmentManager);
+        mCreator = creator;
     }
 
     public boolean containsPage(int page) {
@@ -50,7 +53,7 @@ public class TestPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         int page = position + 1;
-        TestFragment fragment = TestFragment.newInstance(page);
+        Fragment fragment = mCreator.createFragment(page);
         pages.add(page);
         fragments.add(fragment);
         return fragment;

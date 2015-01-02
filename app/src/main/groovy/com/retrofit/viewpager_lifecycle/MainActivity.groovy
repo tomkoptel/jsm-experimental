@@ -27,7 +27,9 @@ public class MainActivity extends FragmentActivity {
         findViewById(R.id.selectPage).setOnClickListener({ selectPage() });
 
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
-        mAdapter = new TestPagerAdapter(getSupportFragmentManager());
+        mAdapter = new TestPagerAdapter(getSupportFragmentManager(), { page ->
+            return TestFragment.newInstance(page);
+        });
         mViewPager.setAdapter(mAdapter);
 
         if (savedInstanceState == null) {

@@ -19,6 +19,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/ASL2.0'
+        exclude 'asm-license.txt'
+        exclude 'NOTICE'
+        exclude 'LICENSE'
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+    }
 }
 
 project.androidGroovy {
@@ -29,6 +42,10 @@ project.androidGroovy {
 }
 
 dependencies {
+    compile project(':rest')
+
     compile 'org.codehaus.groovy:groovy:2.4.0-beta-3:grooid'
     compile 'com.android.support:support-v4:21.0.3'
+    compile 'io.reactivex:rxandroid:0.23.0'
+    compile 'com.squareup.retrofit:retrofit:1.8.0'
 }
