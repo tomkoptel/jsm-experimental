@@ -6,13 +6,11 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.retrofit.viewpager_lifecycle;
+package com.retrofit.viewpager_lifecycle
 
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
-import android.view.View;
-
+import android.os.Bundle
+import android.support.v4.app.FragmentActivity
+import android.support.v4.view.ViewPager
 
 public class MainActivity extends FragmentActivity {
 
@@ -28,27 +26,25 @@ public class MainActivity extends FragmentActivity {
         mAdapter = new TestPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mAdapter);
 
-        findViewById(R.id.previous).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int currentPage = mViewPager.getCurrentItem();
-                mViewPager.setCurrentItem(currentPage - 1);
-            }
-        });
-        findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int index = mViewPager.getCurrentItem();
-                int nextPage = index + 2;
-
-                mAdapter.addPageOnDemand(nextPage);
-                mViewPager.setCurrentItem(index + 1);
-            }
-        });
+        findViewById(R.id.previous).setOnClickListener({ showPreviousPage() });
+        findViewById(R.id.next).setOnClickListener({ showNextPage() });
 
         if (savedInstanceState == null) {
             mAdapter.addPage();
         }
+    }
+
+    private void showNextPage() {
+        int index = mViewPager.getCurrentItem();
+        int nextPage = index + 2;
+
+        mAdapter.addPageOnDemand(nextPage);
+        mViewPager.setCurrentItem(index + 1);
+    }
+
+    private void showPreviousPage() {
+        int currentPage = mViewPager.getCurrentItem();
+        mViewPager.setCurrentItem(currentPage - 1);
     }
 
 }
