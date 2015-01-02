@@ -22,15 +22,17 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        findViewById(R.id.previous).setOnClickListener({ showPreviousPage() });
+        findViewById(R.id.next).setOnClickListener({ showNextPage() });
+        findViewById(R.id.selectPage).setOnClickListener({ selectPage() });
+
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
         mAdapter = new TestPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mAdapter);
 
-        findViewById(R.id.previous).setOnClickListener({ showPreviousPage() });
-        findViewById(R.id.next).setOnClickListener({ showNextPage() });
-
         if (savedInstanceState == null) {
             mAdapter.addPage();
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -45,6 +47,23 @@ public class MainActivity extends FragmentActivity {
     private void showPreviousPage() {
         int currentPage = mViewPager.getCurrentItem();
         mViewPager.setCurrentItem(currentPage - 1);
+    }
+
+    private void selectPage() {
+        def onPageSelected = { page ->
+            def count = mAdapter.getCount()
+            if (count < page) {
+                mAdapter.setCount(page)
+                mAdapter.notifyDataSetChanged()
+            }
+            mViewPager.setCurrentItem(page - 1)
+        }
+        def currentPage = mViewPager.getCurrentItem() + 1
+        def maxPage = mAdapter.getCount() + 1000
+        NumberDialogFragment.show(
+                getSupportFragmentManager(), currentPage,
+                maxPage, onPageSelected
+        )
     }
 
 }

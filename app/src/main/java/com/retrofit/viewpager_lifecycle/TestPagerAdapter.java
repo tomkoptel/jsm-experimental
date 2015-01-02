@@ -41,7 +41,10 @@ public class TestPagerAdapter extends FragmentPagerAdapter {
 
     public void addPage() {
         mCount++;
-        notifyDataSetChanged();
+    }
+
+    public void setCount(int count) {
+        mCount = count;
     }
 
     @Override
