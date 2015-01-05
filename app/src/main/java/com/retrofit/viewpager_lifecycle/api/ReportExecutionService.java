@@ -11,6 +11,7 @@ package com.retrofit.viewpager_lifecycle.api;
 import com.retrofit.viewpager_lifecycle.ojm.ExecutionRequest;
 import com.retrofit.viewpager_lifecycle.ojm.InputControlsList;
 import com.retrofit.viewpager_lifecycle.ojm.ReportExecutionResponse;
+import com.retrofit.viewpager_lifecycle.ojm.ReportParametersList;
 
 import retrofit.http.Body;
 import retrofit.http.GET;
@@ -22,12 +23,17 @@ import rx.Observable;
  * Created by samsung on 1/2/15.
  */
 public interface ReportExecutionService {
+    @POST("/rest_v2/reports{uri}/inputControls")
+    Observable<InputControlsList> postInputControlsList(
+            @Path(value = "uri", encode = false) String resourceUri,
+            @Body ReportParametersList parameters
+    );
     @GET("/rest_v2/reports{uri}/inputControls")
     Observable<InputControlsList> getInputControlsList(
             @Path(value = "uri", encode = false) String resourceUri
     );
     @POST("/rest_v2/reportExecutions")
-    Observable<ReportExecutionResponse> reportExecution(
+    Observable<ReportExecutionResponse> postReportExecution(
             @Body ExecutionRequest request
     );
 }

@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'loglifecycle'
-apply plugin: 'me.champeau.gradle.groovy-android'
 
 android {
     compileSdkVersion 21
@@ -34,18 +33,14 @@ android {
     }
 }
 
-project.androidGroovy {
-    options {
-        sourceCompatibility = '1.7'
-        targetCompatibility = '1.7'
-    }
-}
-
 dependencies {
     compile project(':rest')
 
-    compile 'org.codehaus.groovy:groovy:2.4.0-beta-3:grooid'
+    compile 'com.jakewharton.timber:timber:2.5.0'
     compile 'com.android.support:support-v4:21.0.3'
+
+    compile 'io.reactivex:rxjava:1.0.4'
     compile 'io.reactivex:rxandroid:0.23.0'
+
     compile 'com.squareup.retrofit:retrofit:1.8.0'
 }
