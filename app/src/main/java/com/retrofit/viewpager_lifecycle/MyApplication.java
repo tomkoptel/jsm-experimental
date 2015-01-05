@@ -1,6 +1,15 @@
 package com.retrofit.viewpager_lifecycle;
 
 import android.app.Application;
+import android.widget.Toast;
+
+import com.retrofit.viewpager_lifecycle.network.ApiErrorEvent;
+import com.retrofit.viewpager_lifecycle.network.RestClient;
+import com.retrofit.viewpager_lifecycle.network.report.ReportApi;
+import com.retrofit.viewpager_lifecycle.network.report.ReportExecutionService;
+import com.retrofit.viewpager_lifecycle.report.CrashReportingTree;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 import timber.log.Timber;
 
@@ -9,9 +18,18 @@ import timber.log.Timber;
  * @since 1.9
  */
 public class MyApplication extends Application {
+    private ReportExecutionService reportExecutionService;
+    private final Bus mBus = EventBus.INSTANCE.bus();
+
     @Override
     public void onCreate() {
         super.onCreate();
+
+        ReportApi api = RestClient.INSTANCE.adapter().create(ReportApi.class);
+        reportExecutionService = new ReportExecutionService(api, mBus);
+        mBus.register(reportExecutionService);
+        mBus.register(this);
+
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         } else {
@@ -19,30 +37,8 @@ public class MyApplication extends Application {
         }
     }
 
-    /**
-     * A tree which logs important information for crash reporting.
-     */
-    private static class CrashReportingTree extends Timber.HollowTree {
-        @Override
-        public void i(String message, Object... args) {
-            // TODO e.g., Crashlytics.log(String.format(message, args));
-        }
-
-        @Override
-        public void i(Throwable t, String message, Object... args) {
-            i(message, args); // Just add to the log.
-        }
-
-        @Override
-        public void e(String message, Object... args) {
-            i("ERROR: " + message, args); // Just add to the log.
-        }
-
-        @Override
-        public void e(Throwable t, String message, Object... args) {
-            e(message, args);
-
-            // TODO e.g., Crashlytics.logException(t);
-        }
+    @Subscribe
+    public void onApiError(ApiErrorEvent errorEvent) {
+        Toast.makeText(this, errorEvent.getMessage(), Toast.LENGTH_SHORT).show();
     }
 }

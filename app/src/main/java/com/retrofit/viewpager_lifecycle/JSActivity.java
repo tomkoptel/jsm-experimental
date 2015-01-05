@@ -8,50 +8,50 @@
 
 package com.retrofit.viewpager_lifecycle;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Base64;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.retrofit.viewpager_lifecycle.api.ReportExecutionService;
+import com.retrofit.viewpager_lifecycle.network.ApiErrorEvent;
+import com.retrofit.viewpager_lifecycle.network.RestClient;
+import com.retrofit.viewpager_lifecycle.network.report.ReportApi;
+import com.retrofit.viewpager_lifecycle.network.report.event.ExecutionStartedEvent;
+import com.retrofit.viewpager_lifecycle.network.report.event.ListParametersEvent;
+import com.retrofit.viewpager_lifecycle.network.report.event.ParametersLoadedEvent;
+import com.retrofit.viewpager_lifecycle.network.report.event.StartExecutionEvent;
 import com.retrofit.viewpager_lifecycle.ojm.ExecutionRequest;
 import com.retrofit.viewpager_lifecycle.ojm.InputControlsList;
-import com.retrofit.viewpager_lifecycle.ojm.ReportExecutionResponse;
-import com.retrofit.viewpager_lifecycle.ojm.ReportParametersList;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
-import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
-import rx.Observable;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 public class JSActivity extends FragmentActivity {
-    private static final String ENDPOINT = "http://mobiledemo.jaspersoft.com/jasperserver-pro";
     private static final String RESOURCE_URI = "/public/Samples/Reports/AllAccounts";
+    private static final String RUNNING_EXTRA = "RUNNING_EXTRA";
+    private static final String RUNNING_RESPONSE = "RUNNING_RESPONSE";
 
-    private ReportExecutionService mService;
     private TextView mTextView;
 
-    private final CompositeSubscription mCompositeSubscription = new CompositeSubscription();
+    private final Bus mBus = EventBus.INSTANCE.bus();
+    private boolean isRunning;
+    private String mResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         Timber.tag(JSActivity.class.getSimpleName());
-        setupApiService();
 
         mTextView = (TextView) findViewById(android.R.id.text1);
-        mTextView.setText("hello world");
 
         findViewById(R.id.selectPage).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,73 +59,98 @@ public class JSActivity extends FragmentActivity {
                 doSomething();
             }
         });
-    }
+        findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RestAdapter adapter = RestClient.BROKEN.adapter();
+                ReportApi api = adapter.create(ReportApi.class);
+                api.getInputControlsList(RESOURCE_URI)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                new Action1<InputControlsList>() {
+                                    @Override
+                                    public void call(InputControlsList controlsList) {
 
-    private void doSomething() {
-        final Context context = this;
-        Observable<InputControlsList> listInputControls =
-                mService.postInputControlsList(RESOURCE_URI, new ReportParametersList());
+                                    }
+                                }, new Action1<Throwable>() {
+                                    @Override
+                                    public void call(Throwable throwable) {
+                                        mBus.post(ApiErrorEvent.valueOf(throwable));
+                                    }
+                                });
+            }
+        });
 
-        Subscription subscription = listInputControls
-                .flatMap(new Func1<InputControlsList, Observable<ReportExecutionResponse>>() {
-                    @Override
-                    public Observable<ReportExecutionResponse> call(InputControlsList inputControlsList) {
-                        return mService.postReportExecution(createExecutionData());
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        new Action1<ReportExecutionResponse>() {
-                            @Override
-                            public void call(ReportExecutionResponse response) {
-                                mTextView.setText(response.toString());
-                            }
-                        },
-                        new Action1<Throwable>() {
-                            @Override
-                            public void call(Throwable throwable) {
-                                Timber.e(throwable.getMessage(), throwable);
-                                Toast.makeText(context, throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                );
-        mCompositeSubscription.add(subscription);
+        if (savedInstanceState != null
+                && savedInstanceState.containsKey(RUNNING_EXTRA)
+                && savedInstanceState.containsKey(RUNNING_RESPONSE)
+                ) {
+            isRunning = savedInstanceState.getBoolean(RUNNING_EXTRA);
+            mResponse = savedInstanceState.getString(RUNNING_RESPONSE);
+        } else {
+            mResponse = "hello world";
+        }
+        mTextView.setText(mResponse);
+
+        applyProgress();
     }
 
     @Override
-    protected void onDestroy() {
-        mCompositeSubscription.unsubscribe();
-        super.onDestroy();
+    protected void onResume() {
+        super.onResume();
+        mBus.register(this);
     }
 
-    private ExecutionRequest createExecutionData() {
-        return new ExecutionRequest()
+    @Override
+    public void onPause() {
+        super.onPause();
+        mBus.unregister(this);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(RUNNING_EXTRA, isRunning);
+        outState.putString(RUNNING_RESPONSE, mResponse);
+    }
+
+    private void doSomething() {
+        setProgressEnabled(true);
+        mBus.post(ListParametersEvent.forThe(RESOURCE_URI));
+    }
+
+    @Subscribe
+    public void onParametersLoaded(ParametersLoadedEvent event) {
+        applyProgress();
+        ExecutionRequest configs = new ExecutionRequest()
                 .withReportUnitUri(JSActivity.RESOURCE_URI)
                 .withOutputFormat("html")
                 .withAsync(true)
                 .withInteractive(true)
                 .withIgnorePagination(false);
+        mBus.post(StartExecutionEvent.forThe(configs));
     }
 
-    private void setupApiService() {
-        RequestInterceptor requestInterceptor = new RequestInterceptor() {
-            @Override
-            public void intercept(RequestFacade request) {
-                String authorisation = "superuser:superuser";
-                byte[] encodedAuthorisation = Base64.encode(authorisation.getBytes(), Base64.NO_WRAP);
-                String authToken = "Basic " + new String(encodedAuthorisation);
+    @Subscribe
+    public void onExecutionStarted(ExecutionStartedEvent event) {
+        setProgressEnabled(false);
+        mResponse = event.response().toString();
+        mTextView.setText(event.response().toString());
+    }
 
-                request.addHeader("Authorization", authToken);
-                request.addHeader("Accept", "application/json");
-                request.addHeader("Content-type", "application/json");
-            }
-        };
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setRequestInterceptor(requestInterceptor)
-                .setEndpoint(ENDPOINT)
-                .build();
-        mService = restAdapter.create(ReportExecutionService.class);
+    @Subscribe
+    public void onApiError(ApiErrorEvent errorEvent) {
+        setProgressEnabled(false);
+    }
+
+    private void setProgressEnabled(boolean enabled) {
+        isRunning = enabled;
+        applyProgress();
+    }
+
+    private void applyProgress() {
+        setProgressBarIndeterminateVisibility(isRunning);
     }
 
 }

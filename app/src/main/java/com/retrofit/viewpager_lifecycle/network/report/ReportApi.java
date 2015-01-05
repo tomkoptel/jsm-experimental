@@ -6,7 +6,7 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.retrofit.viewpager_lifecycle.api;
+package com.retrofit.viewpager_lifecycle.network.report;
 
 import com.retrofit.viewpager_lifecycle.ojm.ExecutionRequest;
 import com.retrofit.viewpager_lifecycle.ojm.InputControlsList;
@@ -22,7 +22,7 @@ import rx.Observable;
 /**
  * Created by samsung on 1/2/15.
  */
-public interface ReportExecutionService {
+public interface ReportApi {
     @POST("/rest_v2/reports{uri}/inputControls")
     Observable<InputControlsList> postInputControlsList(
             @Path(value = "uri", encode = false) String resourceUri,
