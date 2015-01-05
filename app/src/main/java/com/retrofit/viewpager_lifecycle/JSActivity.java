@@ -25,9 +25,9 @@ import com.retrofit.viewpager_lifecycle.ojm.ReportParametersList;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import rx.Observable;
-import rx.Observer;
 import rx.Subscription;
-import rx.android.observables.AndroidObservable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -66,34 +66,30 @@ public class JSActivity extends FragmentActivity {
         Observable<InputControlsList> listInputControls =
                 mService.postInputControlsList(RESOURCE_URI, new ReportParametersList());
 
-        Subscription subscription =
-                AndroidObservable.bindActivity(this, listInputControls)
-                        .subscribeOn(Schedulers.io())
-                        .flatMap(new Func1<InputControlsList, Observable<ReportExecutionResponse>>() {
+        Subscription subscription = listInputControls
+                .flatMap(new Func1<InputControlsList, Observable<ReportExecutionResponse>>() {
+                    @Override
+                    public Observable<ReportExecutionResponse> call(InputControlsList inputControlsList) {
+                        return mService.postReportExecution(createExecutionData());
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        new Action1<ReportExecutionResponse>() {
                             @Override
-                            public Observable<ReportExecutionResponse> call(InputControlsList inputControlsList) {
-                                return mService.postReportExecution(createExecutionData());
+                            public void call(ReportExecutionResponse response) {
+                                mTextView.setText(response.toString());
                             }
-                        })
-                        .subscribe(
-                                new Observer<ReportExecutionResponse>() {
-                                    @Override
-                                    public void onCompleted() {
-                                        Timber.d("Retrofit call 1 completed");
-                                    }
-
-                                    @Override
-                                    public void onError(Throwable throwable) {
-                                        Timber.e(throwable.getMessage(), throwable);
-                                        Toast.makeText(context, throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-
-                                    @Override
-                                    public void onNext(ReportExecutionResponse response) {
-                                        mTextView.setText(response.toString());
-
-                                    }
-                                });
+                        },
+                        new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                Timber.e(throwable.getMessage(), throwable);
+                                Toast.makeText(context, throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                );
         mCompositeSubscription.add(subscription);
     }
 
