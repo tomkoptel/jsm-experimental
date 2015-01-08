@@ -47,7 +47,7 @@ public class JSActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.js_main);
 
         Timber.tag(JSActivity.class.getSimpleName());
 

@@ -60,6 +60,11 @@ public class TestPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
+    public CharSequence getPageTitle(int position) {
+        return "Page " + (position + 1);
+    }
+
+    @Override
     public long getItemId(int position) {
         return position + 1;
     }

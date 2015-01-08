@@ -12,7 +12,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class MainActivity extends FragmentActivity {
 
@@ -23,25 +24,6 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        findViewById(R.id.previous).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPreviousPage();
-            }
-        });
-        findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showNextPage();
-            }
-        });
-        findViewById(R.id.selectPage).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectPage();
-            }
-        });
 
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
         mAdapter = new TestPagerAdapter(getSupportFragmentManager(), new FragmentCreator<Fragment, Integer>() {
@@ -58,11 +40,35 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.previousPage:
+                showPreviousPage();
+                return true;
+            case R.id.nextPage:
+                showNextPage();
+                return true;
+            case R.id.selectPage:
+                selectPage();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void showNextPage() {
         int index = mViewPager.getCurrentItem();
         int nextPage = index + 2;
 
         mAdapter.addPageOnDemand(nextPage);
+        mAdapter.notifyDataSetChanged();
         mViewPager.setCurrentItem(index + 1);
     }
 
@@ -85,7 +91,7 @@ public class MainActivity extends FragmentActivity {
                     }
                 };
         int currentPage = mViewPager.getCurrentItem() + 1;
-        int maxPage = mAdapter.getCount() + 1000;
+        int maxPage = mAdapter.getCount() + 10000;
         NumberDialogFragment.show(
                 getSupportFragmentManager(), currentPage,
                 maxPage, onPageSelected
