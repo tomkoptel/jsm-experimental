@@ -1,2 +1,2 @@
-include ':app'
+include ':stateless-viewpager', ':sdk', ':authenticator-sample'
 include ':rest'

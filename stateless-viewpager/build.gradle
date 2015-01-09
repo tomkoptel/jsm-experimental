@@ -34,7 +34,7 @@ android {
 }
 
 dependencies {
-    compile project(':rest')
+    compile project(':sdk')
 
     compile 'com.jakewharton.timber:timber:2.5.0'
     compile 'com.android.support:support-v4:21.0.3'
