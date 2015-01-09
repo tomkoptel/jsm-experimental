@@ -14,6 +14,7 @@ public class JasperServer implements Parcelable {
     private long mRowId;
     private String mAlias;
     private String mServerUrl;
+    private String mOrganization;
     private String mVersionName;
     private String mEdition;
     private String mCreatedAt;
@@ -21,7 +22,8 @@ public class JasperServer implements Parcelable {
 
     private ContentValues mValues = new ContentValues();
 
-    public JasperServer() {}
+    public JasperServer() {
+    }
 
     public JasperServer(final Cursor cursor) {
         this(cursor, false);
@@ -32,6 +34,7 @@ public class JasperServer implements Parcelable {
         setRowId(cursor.getLong(cursor.getColumnIndex(prefix + JasperServerTable._ID)));
         setAlias(cursor.getString(cursor.getColumnIndex(prefix + JasperServerTable.ALIAS)));
         setServerUrl(cursor.getString(cursor.getColumnIndex(prefix + JasperServerTable.SERVER_URL)));
+        setOrganization(cursor.getString(cursor.getColumnIndex(prefix + JasperServerTable.ORGANIZATION)));
         setVersionName(cursor.getString(cursor.getColumnIndex(prefix + JasperServerTable.VERSION_NAME)));
         setEdition(cursor.getString(cursor.getColumnIndex(prefix + JasperServerTable.EDITION)));
         setCreatedAt(cursor.getString(cursor.getColumnIndex(prefix + JasperServerTable.CREATED_AT)));
@@ -49,13 +52,14 @@ public class JasperServer implements Parcelable {
         mRowId = _id;
         mValues.put(JasperServerTable._ID, _id);
     }
+
     public void setAlias(String alias) {
         mAlias = alias;
         mValues.put(JasperServerTable.ALIAS, alias);
     }
 
     public String getAlias() {
-            return mAlias;
+        return mAlias;
     }
 
 
@@ -65,7 +69,17 @@ public class JasperServer implements Parcelable {
     }
 
     public String getServerUrl() {
-            return mServerUrl;
+        return mServerUrl;
+    }
+
+
+    public void setOrganization(String organization) {
+        mOrganization = organization;
+        mValues.put(JasperServerTable.ORGANIZATION, organization);
+    }
+
+    public String getOrganization() {
+        return mOrganization;
     }
 
 
@@ -75,7 +89,7 @@ public class JasperServer implements Parcelable {
     }
 
     public String getVersionName() {
-            return mVersionName;
+        return mVersionName;
     }
 
 
@@ -85,7 +99,7 @@ public class JasperServer implements Parcelable {
     }
 
     public String getEdition() {
-            return mEdition;
+        return mEdition;
     }
 
 
@@ -95,9 +109,43 @@ public class JasperServer implements Parcelable {
     }
 
     public String getCreatedAt() {
-            return mCreatedAt;
+        return mCreatedAt;
     }
 
+    public JasperServer withRowId(long _id) {
+        setRowId(_id);
+        return this;
+    }
+
+    public JasperServer withAlias(String alias) {
+        setAlias(alias);
+        return this;
+    }
+
+    public JasperServer withServerUrl(String server_url) {
+        setServerUrl(server_url);
+        return this;
+    }
+
+    public JasperServer withOrganization(String organization) {
+        setOrganization(organization);
+        return this;
+    }
+
+    public JasperServer withVersionName(String version_name) {
+        setVersionName(version_name);
+        return this;
+    }
+
+    public JasperServer withEdition(String edition) {
+        setEdition(edition);
+        return this;
+    }
+
+    public JasperServer withCreatedAt(String created_at) {
+        setCreatedAt(created_at);
+        return this;
+    }
 
     public static List<JasperServer> listFromCursor(Cursor cursor) {
         List<JasperServer> list = new ArrayList<JasperServer>();
@@ -121,18 +169,20 @@ public class JasperServer implements Parcelable {
         dest.writeLong(this.mRowId);
         dest.writeString(this.mAlias);
         dest.writeString(this.mServerUrl);
+        dest.writeString(this.mOrganization);
         dest.writeString(this.mVersionName);
         dest.writeString(this.mEdition);
         dest.writeString(this.mCreatedAt);
     }
 
     public JasperServer(Parcel in) {
-        this.mRowId = in.readLong();
-        this.mAlias = in.readString();
-        this.mServerUrl = in.readString();
-        this.mVersionName = in.readString();
-        this.mEdition = in.readString();
-        this.mCreatedAt = in.readString();
+        setRowId(in.readLong());
+        setAlias(in.readString());
+        setServerUrl(in.readString());
+        setOrganization(in.readString());
+        setVersionName(in.readString());
+        setEdition(in.readString());
+        setCreatedAt(in.readString());
     }
 
     public static final Creator<JasperServer> CREATOR = new Creator<JasperServer>() {

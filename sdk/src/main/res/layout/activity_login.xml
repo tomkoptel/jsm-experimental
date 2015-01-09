@@ -45,6 +45,7 @@
             android:layout_height="wrap_content" />
         <Button
             android:text="Try demo"
+            android:id="@+id/tryDemo"
             android:onClick="tryDemoAction"
             android:layout_weight="1"
             android:layout_width="0dp"

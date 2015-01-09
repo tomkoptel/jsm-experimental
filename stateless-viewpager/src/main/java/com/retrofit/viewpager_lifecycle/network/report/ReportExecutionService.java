@@ -8,14 +8,12 @@
 
 package com.retrofit.viewpager_lifecycle.network.report;
 
+import com.jaspersoft.android.retrofit.sdk.ojm.ReportParametersList;
 import com.retrofit.viewpager_lifecycle.network.ApiErrorEvent;
 import com.retrofit.viewpager_lifecycle.network.report.event.ExecutionStartedEvent;
 import com.retrofit.viewpager_lifecycle.network.report.event.ListParametersEvent;
 import com.retrofit.viewpager_lifecycle.network.report.event.ParametersLoadedEvent;
 import com.retrofit.viewpager_lifecycle.network.report.event.StartExecutionEvent;
-import com.retrofit.viewpager_lifecycle.ojm.InputControlsList;
-import com.retrofit.viewpager_lifecycle.ojm.ReportExecutionResponse;
-import com.retrofit.viewpager_lifecycle.ojm.ReportParametersList;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 

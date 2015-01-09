@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
+import com.jaspersoft.android.retrofit.sdk.ojm.ExecutionRequest;
+import com.jaspersoft.android.retrofit.sdk.ojm.InputControlsList;
 import com.retrofit.viewpager_lifecycle.network.ApiErrorEvent;
 import com.retrofit.viewpager_lifecycle.network.RestClient;
 import com.retrofit.viewpager_lifecycle.network.report.ReportApi;
@@ -21,8 +23,6 @@ import com.retrofit.viewpager_lifecycle.network.report.event.ExecutionStartedEve
 import com.retrofit.viewpager_lifecycle.network.report.event.ListParametersEvent;
 import com.retrofit.viewpager_lifecycle.network.report.event.ParametersLoadedEvent;
 import com.retrofit.viewpager_lifecycle.network.report.event.StartExecutionEvent;
-import com.retrofit.viewpager_lifecycle.ojm.ExecutionRequest;
-import com.retrofit.viewpager_lifecycle.ojm.InputControlsList;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 

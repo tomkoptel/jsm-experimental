@@ -7,6 +7,7 @@ import android.os.Build;
 
 import com.jaspersoft.android.retrofit.sdk.database.table.JasperServerTable;
 import com.jaspersoft.android.retrofit.sdk.model.JasperServer;
+import com.jaspersoft.android.retrofit.sdk.util.JasperSettings;
 
 public class JasperSdkDatabase extends SQLiteOpenHelper {
     public static final boolean FOREIGN_KEYS_SUPPORTED = Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO;
@@ -29,9 +30,9 @@ public class JasperSdkDatabase extends SQLiteOpenHelper {
         executePragmas(db);
         switch (oldVersion) {
             case 1:
-                db.execSQL("CREATE TABLE jasper_server ( _id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        " alias TEXT NOT NULL UNIQUE, server_url TEXT NOT NULL," +
-                        " version_name TEXT, edition TEXT )");
+                db.execSQL("CREATE TABLE jasper_server ( _id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "alias TEXT NOT NULL UNIQUE, server_url TEXT NOT NULL, organization TEXT, " +
+                        "version_name TEXT, edition TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP )");
         }
     }
 
@@ -54,11 +55,9 @@ public class JasperSdkDatabase extends SQLiteOpenHelper {
     }
 
     private void insertDefaultServer(SQLiteDatabase db) {
-        JasperServer jasperServer = new JasperServer();
-        jasperServer.setAlias("Jasper Mobile");
-        jasperServer.setServerUrl("http://mobiledemo.jaspersoft.com/jasperserver-pro");
-        jasperServer.setEdition("PRO");
-        jasperServer.setVersionName("5.6");
+        JasperServer jasperServer = new JasperServer()
+                .withAlias("Jasper Mobile")
+                .withServerUrl(JasperSettings.DEFAULT_ENDPOINT);
         db.insert(JasperServerTable.TABLE_NAME, null, jasperServer.getContentValues());
     }
 }

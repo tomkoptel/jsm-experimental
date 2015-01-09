@@ -8,7 +8,8 @@
 
 package com.retrofit.viewpager_lifecycle.network.report.event;
 
-import com.retrofit.viewpager_lifecycle.ojm.ExecutionRequest;
+
+import com.jaspersoft.android.retrofit.sdk.ojm.ExecutionRequest;
 
 /**
  * Created by samsung on 1/5/15.

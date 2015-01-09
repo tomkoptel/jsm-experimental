@@ -8,10 +8,10 @@
 
 package com.retrofit.viewpager_lifecycle.network.report;
 
-import com.retrofit.viewpager_lifecycle.ojm.ExecutionRequest;
-import com.retrofit.viewpager_lifecycle.ojm.InputControlsList;
-import com.retrofit.viewpager_lifecycle.ojm.ReportExecutionResponse;
-import com.retrofit.viewpager_lifecycle.ojm.ReportParametersList;
+import com.jaspersoft.android.retrofit.sdk.ojm.ExecutionRequest;
+import com.jaspersoft.android.retrofit.sdk.ojm.InputControlsList;
+import com.jaspersoft.android.retrofit.sdk.ojm.ReportExecutionResponse;
+import com.jaspersoft.android.retrofit.sdk.ojm.ReportParametersList;
 
 import retrofit.http.Body;
 import retrofit.http.GET;
