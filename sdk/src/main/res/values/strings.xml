@@ -1,0 +1,8 @@
+<resources>
+    <string name="title_activity_login">Log in</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_add_server">Add server</string>
+    <string name="authenticator_label">Jasper accounts</string>
+
+</resources>

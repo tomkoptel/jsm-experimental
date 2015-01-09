@@ -1,9 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.retrofit.sample.authenticator">
 
-    <application android:allowBackup="true" android:label="@string/app_name"
-        android:icon="@drawable/ic_launcher" android:theme="@style/AppTheme">
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
 
+    <!--
+     No need for project and is ignored at runtime. This is useful for Android Studio exclusively.
+     As soon as you run tests from it, you should explicitly tell him here about your default instrumentation.
+    -->
+    <instrumentation
+        android:name="android.support.test.runner.AndroidJUnitRunner"
+        android:targetPackage="com.retrofit.sample.authenticator.test" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_add_server"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".HomeActivity"
+            android:label="@string/title_activity_home">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- SDK external components -->
+        <activity android:name="com.jaspersoft.android.retrofit.sdk.AuthenticatorActivity">
+            <intent-filter>
+                <action android:name="jaspersoft.settings.AUTHORIZE_SETTINGS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.jaspersoft.android.retrofit.sdk.ServersActivity">
+            <intent-filter>
+                <action android:name="jaspersoft.settings.LIST_SERVERS_SETTINGS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <service android:name="com.jaspersoft.android.retrofit.sdk.account.JasperAuthenticatorService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+
+        <provider
+            android:name="com.jaspersoft.android.retrofit.sdk.provider.JasperSdkProvider"
+            android:authorities="com.jaspersoft.android.retrofit.sdk.provider"
+            android:exported="false" />
     </application>
 
 </manifest>
