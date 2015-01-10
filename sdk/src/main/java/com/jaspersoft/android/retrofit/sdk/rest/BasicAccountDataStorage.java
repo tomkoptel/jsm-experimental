@@ -18,34 +18,70 @@ import android.text.TextUtils;
  * @since 2.0
  */
 public class BasicAccountDataStorage implements AccountDataStorage {
-    public static final String TAG = BasicAccountDataStorage.class.getSimpleName();
+    private static final String PREF_NAME = BasicAccountDataStorage.class.getSimpleName();
+    private static final String SERVER_COOKIE_KEY = "SERVER_COOKIE_KEY";
+    private static final String SERVER_VERSION_KEY = "SERVER_VERSION_KEY";
+    private static final String SERVER_EDITION_KEY = "SERVER_EDITION_KEY";
 
-    private static final String COOKIE_KEY = "COOKIE_KEY";
     private final SharedPreferences mPreference;
 
     private BasicAccountDataStorage(Context context) {
-        mPreference = context.getSharedPreferences(TAG, Activity.MODE_PRIVATE);
+        mPreference = context.getSharedPreferences(PREF_NAME, Activity.MODE_PRIVATE);
     }
 
     public static BasicAccountDataStorage get(Context context) {
         return new BasicAccountDataStorage(context);
     }
 
-    public BasicAccountDataStorage withCookie(String cookie) {
-        putCookie(cookie);
+    public BasicAccountDataStorage putCookie(String cookie) {
+        setServerCookie(cookie);
         return this;
     }
 
     @Override
-    public void putCookie(String cookie) {
-        if (TextUtils.isEmpty(cookie)) {
-            throw new RuntimeException("Cookie value should not be empty");
-        }
-        mPreference.edit().putString("COOKIE_KEY", cookie).apply();
+    public void setServerCookie(String cookie) {
+        putString(SERVER_COOKIE_KEY, cookie);
     }
 
     @Override
-    public String getCookie() {
-        return mPreference.getString(COOKIE_KEY, "");
+    public String getServerCookie() {
+        return mPreference.getString(SERVER_COOKIE_KEY, "");
+    }
+
+    public BasicAccountDataStorage putVersionName(String versionName) {
+        setServerVersion(versionName);
+        return this;
+    }
+
+    @Override
+    public void setServerVersion(String versionName) {
+        putString(SERVER_VERSION_KEY, versionName);
+    }
+
+    @Override
+    public String getServerVersion() {
+        return mPreference.getString(SERVER_VERSION_KEY, "");
+    }
+
+    public BasicAccountDataStorage putEdition(String editionName) {
+        setServerEdition(editionName);
+        return this;
+    }
+
+    @Override
+    public void setServerEdition(String editionName) {
+        putString(SERVER_EDITION_KEY, editionName);
+    }
+
+    @Override
+    public String getServerEdition() {
+        return mPreference.getString(SERVER_EDITION_KEY, "");
+    }
+
+    private void putString(String key, String value) {
+        if (TextUtils.isEmpty(value)) {
+            throw new RuntimeException(key + " value should not be empty");
+        }
+        mPreference.edit().putString(key, value).apply();
     }
 }

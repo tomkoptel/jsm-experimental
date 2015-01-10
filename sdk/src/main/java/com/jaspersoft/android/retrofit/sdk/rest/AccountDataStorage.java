@@ -13,6 +13,10 @@ package com.jaspersoft.android.retrofit.sdk.rest;
  * @since 2.0
  */
 public interface AccountDataStorage {
-    void putCookie(String cookieValue);
-    String getCookie();
+    void setServerCookie(String cookieValue);
+    String getServerCookie();
+    void setServerVersion(String versionName);
+    String getServerVersion();
+    void setServerEdition(String editionName);
+    String getServerEdition();
 }

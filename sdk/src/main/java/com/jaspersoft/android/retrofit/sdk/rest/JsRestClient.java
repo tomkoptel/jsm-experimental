@@ -11,6 +11,7 @@ package com.jaspersoft.android.retrofit.sdk.rest;
 import android.content.Context;
 
 import com.jaspersoft.android.retrofit.sdk.ojm.ServerInfo;
+import com.jaspersoft.android.retrofit.sdk.rest.response.LoginResponse;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -27,8 +28,8 @@ import retrofit.converter.Converter;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.functions.Func1;
+import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
 /**
@@ -64,7 +65,7 @@ public class JsRestClient {
         mAccessTokenEncoder = accessTokenEncoder;
     }
 
-    public Observable<ServerInfo> login() {
+    public Observable<LoginResponse> login() {
         Observable<String> observable = Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(Subscriber<? super String> subscriber) {
@@ -83,7 +84,7 @@ public class JsRestClient {
         return login(observable);
     }
 
-    public Observable<ServerInfo> login(final String organization, final String username, final String password) {
+    public Observable<LoginResponse> login(final String organization, final String username, final String password) {
         Observable<String> observable = Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(Subscriber<? super String> subscriber) {
@@ -104,7 +105,7 @@ public class JsRestClient {
         return login(observable);
     }
 
-    public Observable<ServerInfo> login(Observable<String> tokenObservable) {
+    public Observable<LoginResponse> login(Observable<String> tokenObservable) {
         final AccountService accountService = mAdapter.create(AccountService.class);
         return tokenObservable
                 .subscribeOn(Schedulers.io())
@@ -132,16 +133,18 @@ public class JsRestClient {
                         return header.getName().equals("set-cookie");
                     }
                 })
-                .doOnNext(new Action1<Header>() {
+                .flatMap(new Func1<Header, Observable<LoginResponse>>() {
                     @Override
-                    public void call(Header header) {
-                        mPreferences.putCookie(header.getValue());
-                    }
-                })
-                .flatMap(new Func1<Header, Observable<ServerInfo>>() {
-                    @Override
-                    public Observable<ServerInfo> call(Header header) {
-                        return accountService.getServerInfo(header.getValue());
+                    public Observable<LoginResponse> call(final Header header) {
+                        return Observable.zip(
+                                Observable.just(header),
+                                accountService.getServerInfo(header.getValue()),
+                                new Func2<Header, ServerInfo, LoginResponse>() {
+                                    @Override
+                                    public LoginResponse call(Header header, ServerInfo serverInfo) {
+                                        return new LoginResponse(header.getValue(), serverInfo);
+                                    }
+                                });
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread());

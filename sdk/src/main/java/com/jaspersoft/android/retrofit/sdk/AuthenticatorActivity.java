@@ -23,6 +23,7 @@ import com.jaspersoft.android.retrofit.sdk.ojm.ServerInfo;
 import com.jaspersoft.android.retrofit.sdk.provider.JasperSdkProvider;
 import com.jaspersoft.android.retrofit.sdk.rest.BasicAccountDataStorage;
 import com.jaspersoft.android.retrofit.sdk.rest.JsRestClient;
+import com.jaspersoft.android.retrofit.sdk.rest.response.LoginResponse;
 import com.jaspersoft.android.retrofit.sdk.util.JasperAuthUtil;
 import com.jaspersoft.android.retrofit.sdk.util.JasperSettings;
 
@@ -131,14 +132,20 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 
         jsRestClient
                 .login(organization, username, password)
-                .subscribe(new Action1<ServerInfo>() {
+                .subscribe(new Action1<LoginResponse>() {
                     @Override
-                    public void call(ServerInfo serverInfo) {
-                        String authToken = BasicAccountDataStorage.get(context).getCookie();
+                    public void call(LoginResponse response) {
+                        String cookie = response.getCookie();
+                        ServerInfo serverInfo = response.getServerInfo();
+                        BasicAccountDataStorage.get(context)
+                                .putCookie(cookie)
+                                .putEdition(serverInfo.getEdition())
+                                .putVersionName(serverInfo.getVersion());
+
                         Account account = new Account(username, JasperAuthUtil.JASPER_ACCOUNT_TYPE);
                         AccountManager accountManager = AccountManager.get(context);
                         accountManager.addAccountExplicitly(account, password, null);
-                        accountManager.setAuthToken(account, null, authToken);
+                        accountManager.setAuthToken(account, null, cookie);
                     }
                 });
     }
