@@ -1,9 +1,9 @@
 package com.jaspersoft.android.retrofit.sdk;
 
 import android.accounts.Account;
-import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
 import android.app.ActionBar;
+import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.CursorLoader;
@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -24,14 +25,16 @@ import com.jaspersoft.android.retrofit.sdk.provider.JasperSdkProvider;
 import com.jaspersoft.android.retrofit.sdk.rest.BasicAccountDataStorage;
 import com.jaspersoft.android.retrofit.sdk.rest.JsRestClient;
 import com.jaspersoft.android.retrofit.sdk.rest.response.LoginResponse;
+import com.jaspersoft.android.retrofit.sdk.rx.RxAccountAuthenticatorActivity;
 import com.jaspersoft.android.retrofit.sdk.util.JasperAuthUtil;
 import com.jaspersoft.android.retrofit.sdk.util.JasperSettings;
 
 import retrofit.ErrorHandler;
 import retrofit.RetrofitError;
+import rx.android.lifecycle.LifecycleObservable;
 import rx.functions.Action1;
 
-public class AuthenticatorActivity extends AccountAuthenticatorActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class AuthenticatorActivity extends RxAccountAuthenticatorActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final String[] FROM = {JasperServerTable.ALIAS};
     private static final int[] TO = {android.R.id.text1};
     private static final int LOAD_SERVERS = 0;
@@ -51,6 +54,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -130,8 +134,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
                 .setEndpoint(JasperSettings.DEFAULT_ENDPOINT + mRestVersion)
                 .build();
 
-        jsRestClient
-                .login(organization, username, password)
+        setProgressBarIndeterminateVisibility(true);
+        LifecycleObservable.bindActivityLifecycle(lifecycle(),
+                jsRestClient.login(organization, username, password))
                 .subscribe(new Action1<LoginResponse>() {
                     @Override
                     public void call(LoginResponse response) {
@@ -145,7 +150,16 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
                         Account account = new Account(username, JasperAuthUtil.JASPER_ACCOUNT_TYPE);
                         AccountManager accountManager = AccountManager.get(context);
                         accountManager.addAccountExplicitly(account, password, null);
-                        accountManager.setAuthToken(account, null, cookie);
+                        accountManager.setAuthToken(account, JasperAuthUtil.JASPER_AUTH_TOKEN_TYPE, cookie);
+
+                        Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show();
+                        setProgressBarIndeterminateVisibility(false);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Toast.makeText(context, "Login failed", Toast.LENGTH_SHORT).show();
+                        setProgressBarIndeterminateVisibility(false);
                     }
                 });
     }

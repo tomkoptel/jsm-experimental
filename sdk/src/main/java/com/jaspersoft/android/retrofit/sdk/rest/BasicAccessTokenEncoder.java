@@ -35,9 +35,7 @@ public class BasicAccessTokenEncoder implements AccessTokenEncoder {
         String mergedName = TextUtils.isEmpty(mOrganization)
                 ? mUsername : (mUsername + "|" + mOrganization);
         String salt = String.format("%s:%s", mergedName, mPassword);
-
-        byte[] encodedSalt = Base64.encode(salt.getBytes(), Base64.NO_WRAP);
-        return new String(encodedSalt);
+        return "Basic " + Base64.encodeToString(salt.getBytes(), Base64.NO_WRAP);
     }
 
     public static class Builder {

@@ -9,6 +9,7 @@
 package com.jaspersoft.android.retrofit.sdk.rest;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.jaspersoft.android.retrofit.sdk.ojm.ServerInfo;
 import com.jaspersoft.android.retrofit.sdk.rest.response.LoginResponse;
@@ -28,6 +29,8 @@ import retrofit.converter.Converter;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action2;
+import rx.functions.Func0;
 import rx.functions.Func1;
 import rx.functions.Func2;
 import rx.schedulers.Schedulers;
@@ -127,22 +130,38 @@ public class JsRestClient {
                         return Observable.from(headers);
                     }
                 })
-                .first(new Func1<Header, Boolean>() {
+                .filter(new Func1<Header, Boolean>() {
                     @Override
                     public Boolean call(Header header) {
-                        return header.getName().equals("set-cookie");
+                        if (TextUtils.isEmpty(header.getName())) {
+                            return false;
+                        }
+                        return header.getName().equals("Set-Cookie");
                     }
                 })
-                .flatMap(new Func1<Header, Observable<LoginResponse>>() {
+                .collect(
+                        new Func0<StringBuilder>() {
+                            @Override
+                            public StringBuilder call() {
+                                return new StringBuilder();
+                            }
+                        },
+                        new Action2<StringBuilder, Header>() {
+                            @Override
+                            public void call(StringBuilder builder, Header header) {
+                                builder.append(header.getValue());
+                            }
+                        })
+                .flatMap(new Func1<StringBuilder, Observable<LoginResponse>>() {
                     @Override
-                    public Observable<LoginResponse> call(final Header header) {
+                    public Observable<LoginResponse> call(final StringBuilder header) {
                         return Observable.zip(
-                                Observable.just(header),
-                                accountService.getServerInfo(header.getValue()),
-                                new Func2<Header, ServerInfo, LoginResponse>() {
+                                Observable.just(header.toString()),
+                                accountService.getServerInfo(header.toString()),
+                                new Func2<String, ServerInfo, LoginResponse>() {
                                     @Override
-                                    public LoginResponse call(Header header, ServerInfo serverInfo) {
-                                        return new LoginResponse(header.getValue(), serverInfo);
+                                    public LoginResponse call(String header, ServerInfo serverInfo) {
+                                        return new LoginResponse(header, serverInfo);
                                     }
                                 });
                     }

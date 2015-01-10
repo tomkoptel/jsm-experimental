@@ -15,8 +15,9 @@ import rx.Observable;
  */
 public interface AccountService {
     @Headers({"Accept: application/repository.folder+json"})
-    @GET("/resource")
+    @GET("/resources")
     Observable<Response> authorize(@Header("Authorization") String authToken);
+    @Headers({"Accept: application/json"})
     @GET("/serverInfo")
     Observable<ServerInfo> getServerInfo(@Header("Set-cookie") String cookie);
 }
