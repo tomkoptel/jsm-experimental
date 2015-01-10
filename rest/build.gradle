@@ -1,3 +1,12 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.jsonschema2pojo:jsonschema2pojo-gradle-plugin:0.4.2'
+    }
+}
+
 apply plugin: 'jsonschema2pojo'
 
 dependencies {

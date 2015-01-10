@@ -19,11 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
-import com.github.stephanenicolas.loglifecycle.LogLifeCycle;
-
 import java.util.Random;
 
-@LogLifeCycle
 public final class TestFragment extends Fragment {
     private static final String KEY_CONTENT = "TestFragment:Content";
     private static final String KEY_PAGE = "TestFragment:Page";
