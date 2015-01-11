@@ -21,8 +21,8 @@ public class HomeActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
         signInOrCreateAnAccount();
+        setContentView(R.layout.activity_home);
     }
 
     private void signInOrCreateAnAccount() {
@@ -54,7 +54,16 @@ public class HomeActivity extends Activity {
     private void addAccount() {
         Intent intent = new Intent(JasperSettings.ACTION_AUTHORIZE);
         intent.putExtra("account_types", new String[]{"com.jaspersoft"});
-        startActivity(intent);
+        startActivityForResult(intent, 10);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 10 && resultCode == Activity.RESULT_OK) {
+            // do something
+        } else {
+            finish();
+        }
+    }
 }

@@ -30,6 +30,7 @@
         android:id="@+id/profiles"
         android:gravity="bottom"
         android:layout_toLeftOf="@+id/addServer"
+        android:spinnerMode="dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -39,14 +40,12 @@
         android:orientation="horizontal">
         <Button
             android:text="Log in"
-            android:onClick="authorizeAction"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content" />
         <Button
             android:text="Try demo"
             android:id="@+id/tryDemo"
-            android:onClick="tryDemoAction"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content" />
