@@ -113,7 +113,7 @@ public class JsRestClient {
     }
 
     public Observable<LoginResponse> login(Observable<String> tokenObservable) {
-        final AccountService accountService = mAdapter.create(AccountService.class);
+        final AccountService accountService = getAccountService();
         return tokenObservable
                 .subscribeOn(Schedulers.io())
                 .flatMap(new Func1<String, Observable<Response>>() {
@@ -171,6 +171,10 @@ public class JsRestClient {
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public AccountService getAccountService() {
+        return mAdapter.create(AccountService.class);
     }
 
     public static class BasicBuilder {

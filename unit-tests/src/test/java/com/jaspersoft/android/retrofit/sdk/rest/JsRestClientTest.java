@@ -8,20 +8,22 @@
 
 package com.jaspersoft.android.retrofit.sdk.rest;
 
-import com.google.gson.Gson;
+import com.jaspersoft.android.retrofit.sdk.ojm.ServerInfo;
 import com.jaspersoft.android.retrofit.sdk.support.UnitTestSpecification;
-import com.jaspersoft.android.retrofit.sdk.util.JasperSettings;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import retrofit.MockRestAdapter;
 import retrofit.RestAdapter;
-import retrofit.converter.GsonConverter;
+import retrofit.client.Response;
+import retrofit.http.Header;
+import rx.Observable;
+import rx.schedulers.ImmediateScheduler;
+import rx.schedulers.Schedulers;
 
-import static com.jaspersoft.android.retrofit.sdk.database.JasperSdkDatabase.DEFAULT_ENDPOINT;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 
 /**
  * @author Tom Koptel
@@ -29,36 +31,41 @@ import static org.mockito.Mockito.when;
  */
 public class JsRestClientTest extends UnitTestSpecification {
     private JsRestClient restClient;
-    private RestAdapter mockAdapter;
-    private AccountService mockAccountService;
-
-    private String mUrl;
-    private GsonConverter mConverter;
     private MockRestAdapter mockRestAdapter;
+    private RestAdapter restAdapter;
+
+
+    private static class MockAccountService implements AccountService {
+        @Override
+        public Observable<Response> authorize(@Header("Authorization") String authToken) {
+            return Observable.error(new RuntimeException("Exception from MockAccountService#authorize"));
+        }
+
+        @Override
+        public Observable<ServerInfo> getServerInfo(@Header("Set-cookie") String cookie) {
+            return Observable.error(new RuntimeException("Exception from MockAccountService#getServerInfo"));
+        }
+    }
 
     @Before
     public void setUp() {
-        mUrl = DEFAULT_ENDPOINT + JasperSettings.DEFAULT_REST_VERSION;
-        mConverter = new GsonConverter(new Gson());
-
-        RestAdapter restAdapter = new RestAdapter.Builder() //
+        restAdapter = new RestAdapter.Builder() //
                 .setEndpoint("http://example.com")
-                .setLogLevel(RestAdapter.LogLevel.NONE)
+                .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
-        mockAdapter = spy(restAdapter);
         mockRestAdapter = MockRestAdapter.from(restAdapter);
+        mockRestAdapter.setDelay(2000);
 
-        restClient = JsRestClient.basicBuilder(getContext())
-                .setRestAdapter(mockAdapter)
-                .build();
-
-        mockAccountService = mockAdapter.create(AccountService.class);
-        when(mockAdapter.create(AccountService.class)).thenReturn(mockAccountService);
+        restClient = spy(JsRestClient.basicBuilder(getContext())
+                .setRestAdapter(restAdapter)
+                .build());
     }
 
     @Test
     public void testAuthorizeMethodThrowsError() {
-//        PublishSubject<Response> subject = PublishSubject.create();
-//        when(mockAccountService.authorize(anyString()));
+        ImmediateScheduler immediateScheduler = (ImmediateScheduler) Schedulers.immediate();
+        AccountService mockService = mockRestAdapter.create(AccountService.class, new MockAccountService());
+        doReturn(mockService).when(restClient).getAccountService();
+        restClient.login("any", "any", "any");
     }
 }
