@@ -1,4 +1,4 @@
-package com.retrofit.sample.authenticator;
+package com.retrofit.sample;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
