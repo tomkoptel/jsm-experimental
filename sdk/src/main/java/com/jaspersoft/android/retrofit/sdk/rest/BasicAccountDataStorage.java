@@ -80,7 +80,7 @@ public class BasicAccountDataStorage implements AccountDataStorage {
 
     private void putString(String key, String value) {
         if (TextUtils.isEmpty(value)) {
-            throw new RuntimeException(key + " value should not be empty");
+            throw new IllegalArgumentException(key + " value should not be empty");
         }
         mPreference.edit().putString(key, value).apply();
     }
