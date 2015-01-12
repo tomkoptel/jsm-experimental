@@ -44,8 +44,12 @@ public class JsRestClient {
     private final AccountDataStorage mPreferences;
     private AccessTokenEncoder mAccessTokenEncoder;
 
-    public static Builder builder(Context context) {
-        return new Builder(context);
+    public static SimpleBuilder simpleBuilder(Context context) {
+        return new SimpleBuilder(context);
+    }
+
+    public static BasicBuilder basicBuilder(Context context) {
+        return new BasicBuilder(context);
     }
 
     public JsRestClient(RestAdapter adapter,
@@ -169,7 +173,45 @@ public class JsRestClient {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public static class Builder {
+    public static class BasicBuilder {
+        private final Context context;
+
+        private RestAdapter restAdapter;
+        private AccessTokenEncoder accessTokenEncoder;
+        private AccountDataStorage accountDataStorage;
+
+        public BasicBuilder(Context context) {
+            this.context = context;
+        }
+
+        public BasicBuilder setAccessTokenEncoder(AccessTokenEncoder accessTokenEncoder) {
+            this.accessTokenEncoder = accessTokenEncoder;
+            return this;
+        }
+
+        public BasicBuilder setAccountDataStorage(AccountDataStorage accountDataStorage) {
+            this.accountDataStorage = accountDataStorage;
+            return this;
+        }
+
+        public BasicBuilder setRestAdapter(RestAdapter restAdapter) {
+            this.restAdapter = restAdapter;
+            return this;
+        }
+
+        public JsRestClient build() {
+            ensureSaneDefaults();
+            return new JsRestClient(restAdapter, accessTokenEncoder, accountDataStorage);
+        }
+
+        private void ensureSaneDefaults() {
+            if (accountDataStorage == null) {
+                setAccountDataStorage(BasicAccountDataStorage.get(context));
+            }
+        }
+    }
+
+    public static class SimpleBuilder {
         private final Context context;
         private final RestAdapter.Builder adapterBuilder;
 
@@ -177,73 +219,73 @@ public class JsRestClient {
         private AccountDataStorage accountDataStorage;
         private RequestInterceptor requestInterceptor;
 
-        public Builder(Context context) {
+        public SimpleBuilder(Context context) {
             this.context = context;
             this.adapterBuilder = new RestAdapter.Builder();
         }
 
-        public Builder setEndpoint(String endpoint) {
+        public SimpleBuilder setEndpoint(String endpoint) {
             adapterBuilder.setEndpoint(endpoint);
             return this;
         }
 
-        public Builder setEndpoint(Endpoint endpoint) {
+        public SimpleBuilder setEndpoint(Endpoint endpoint) {
             adapterBuilder.setEndpoint(endpoint);
             return this;
         }
 
-        public Builder setClient(final Client client) {
+        public SimpleBuilder setClient(final Client client) {
             adapterBuilder.setClient(client);
             return this;
         }
 
-        public Builder setClient(Client.Provider clientProvider) {
+        public SimpleBuilder setClient(Client.Provider clientProvider) {
             adapterBuilder.setClient(clientProvider);
             return this;
         }
 
-        public Builder setExecutors(Executor httpExecutor, Executor callbackExecutor) {
+        public SimpleBuilder setExecutors(Executor httpExecutor, Executor callbackExecutor) {
             adapterBuilder.setExecutors(httpExecutor, callbackExecutor);
             return this;
         }
 
-        public Builder setRequestInterceptor(RequestInterceptor requestInterceptor) {
+        public SimpleBuilder setRequestInterceptor(RequestInterceptor requestInterceptor) {
             adapterBuilder.setRequestInterceptor(requestInterceptor);
             this.requestInterceptor = requestInterceptor;
             return this;
         }
 
-        public Builder setConverter(Converter converter) {
+        public SimpleBuilder setConverter(Converter converter) {
             adapterBuilder.setConverter(converter);
             return this;
         }
 
-        public Builder setProfiler(Profiler profiler) {
+        public SimpleBuilder setProfiler(Profiler profiler) {
             adapterBuilder.setProfiler(profiler);
             return this;
         }
 
-        public Builder setErrorHandler(ErrorHandler errorHandler) {
+        public SimpleBuilder setErrorHandler(ErrorHandler errorHandler) {
             adapterBuilder.setErrorHandler(errorHandler);
             return this;
         }
 
-        public Builder setLog(RestAdapter.Log log) {
+        public SimpleBuilder setLog(RestAdapter.Log log) {
             adapterBuilder.setLog(log);
             return this;
         }
 
-        public Builder setLogLevel(RestAdapter.LogLevel logLevel) {
+        public SimpleBuilder setLogLevel(RestAdapter.LogLevel logLevel) {
             adapterBuilder.setLogLevel(logLevel);
             return this;
         }
 
-        public Builder setAccessTokenEncoder(AccessTokenEncoder accessTokenEncoder) {
+        public SimpleBuilder setAccessTokenEncoder(AccessTokenEncoder accessTokenEncoder) {
             this.accessTokenEncoder = accessTokenEncoder;
             return this;
         }
 
-        public Builder setAccountDataStorage(AccountDataStorage accountDataStorage) {
+        public SimpleBuilder setAccountDataStorage(AccountDataStorage accountDataStorage) {
             this.accountDataStorage = accountDataStorage;
             return this;
         }

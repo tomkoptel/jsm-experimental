@@ -109,7 +109,7 @@ public class AuthenticatorFragment extends Fragment implements LoaderManager.Loa
         }
         setProgressEnabled(mFetching);
 
-        JsRestClient jsRestClient = JsRestClient.builder(getActivity())
+        JsRestClient jsRestClient = JsRestClient.simpleBuilder(getActivity())
                 .setErrorHandler(mErrorHandler)
                 .setEndpoint(DEFAULT_ENDPOINT + mRestVersion)
                 .build();
