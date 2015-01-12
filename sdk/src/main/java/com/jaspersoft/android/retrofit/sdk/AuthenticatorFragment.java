@@ -38,8 +38,6 @@ import com.jaspersoft.android.retrofit.sdk.rest.response.LoginResponse;
 import com.jaspersoft.android.retrofit.sdk.util.JasperAuthUtil;
 import com.jaspersoft.android.retrofit.sdk.util.JasperSettings;
 
-import retrofit.ErrorHandler;
-import retrofit.RetrofitError;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.view.OnClickEvent;
@@ -73,13 +71,6 @@ public class AuthenticatorFragment extends Fragment implements LoaderManager.Loa
     private String mRestVersion;
     private boolean mFetching;
 
-    private final ErrorHandler mErrorHandler = new ErrorHandler() {
-        @Override
-        public Throwable handleError(RetrofitError cause) {
-            Toast.makeText(getActivity(), cause.getMessage(), Toast.LENGTH_LONG).show();
-            return cause;
-        }
-    };
     private Observable<LoginResponse> tryDemoTask;
 
     public static AuthenticatorFragment getInstance(String restVersion) {
@@ -110,7 +101,6 @@ public class AuthenticatorFragment extends Fragment implements LoaderManager.Loa
         setProgressEnabled(mFetching);
 
         JsRestClient jsRestClient = JsRestClient.simpleBuilder(getActivity())
-                .setErrorHandler(mErrorHandler)
                 .setEndpoint(DEFAULT_ENDPOINT + mRestVersion)
                 .build();
 
@@ -151,18 +141,6 @@ public class AuthenticatorFragment extends Fragment implements LoaderManager.Loa
                 tryDemoAction();
             }
         });
-
-//        profiles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(parent.getContext(),
-//                        "On Item Select : \n" + parent.getItemAtPosition(position).toString(),
-//                        Toast.LENGTH_LONG).show();
-//            }
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//            }
-//        });
     }
 
     @Override
