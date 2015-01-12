@@ -43,6 +43,7 @@ import rx.Subscription;
 import rx.android.view.OnClickEvent;
 import rx.android.view.ViewObservable;
 import rx.functions.Action1;
+import rx.subscriptions.CompositeSubscription;
 import rx.subscriptions.Subscriptions;
 
 import static com.jaspersoft.android.retrofit.sdk.database.JasperSdkDatabase.DEFAULT_ENDPOINT;
@@ -66,12 +67,15 @@ public class AuthenticatorFragment extends Fragment implements LoaderManager.Loa
 
     private Spinner profiles;
     private Button tryDemo;
+
     private SimpleCursorAdapter cursorAdapter;
-    private Subscription loginSubscription = Subscriptions.empty();
+
     private String mRestVersion;
     private boolean mFetching;
 
     private Observable<LoginResponse> tryDemoTask;
+    private Subscription loginSubscription = Subscriptions.empty();
+    private CompositeSubscription mCompositeSubscription = new CompositeSubscription();
 
     public static AuthenticatorFragment getInstance(String restVersion) {
         AuthenticatorFragment authenticatorFragment = new AuthenticatorFragment();
@@ -118,8 +122,8 @@ public class AuthenticatorFragment extends Fragment implements LoaderManager.Loa
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         profiles.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View view, MotionEvent event) {
@@ -133,14 +137,22 @@ public class AuthenticatorFragment extends Fragment implements LoaderManager.Loa
         cursorAdapter = new SimpleCursorAdapter(getActivity(),
                 android.R.layout.simple_list_item_1, null, FROM, TO, 0);
         profiles.setAdapter(cursorAdapter);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
 
         getLoaderManager().initLoader(0, null, this);
-        ViewObservable.clicks(tryDemo).subscribe(new Action1<OnClickEvent>() {
-            @Override
-            public void call(OnClickEvent onClickEvent) {
-                tryDemoAction();
-            }
-        });
+        Subscription subscription = ViewObservable.clicks(tryDemo)
+                .subscribe(new Action1<OnClickEvent>() {
+                    @Override
+                    public void call(OnClickEvent onClickEvent) {
+                        tryDemoAction();
+                    }
+                });
+        mCompositeSubscription.add(subscription);
     }
 
     @Override
@@ -231,6 +243,7 @@ public class AuthenticatorFragment extends Fragment implements LoaderManager.Loa
 
     @Override
     public void onDestroyView() {
+        mCompositeSubscription.unsubscribe();
         loginSubscription.unsubscribe();
         super.onDestroyView();
     }
