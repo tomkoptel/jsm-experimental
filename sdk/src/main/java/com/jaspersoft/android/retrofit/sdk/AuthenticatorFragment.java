@@ -47,6 +47,8 @@ import rx.android.view.ViewObservable;
 import rx.functions.Action1;
 import rx.subscriptions.Subscriptions;
 
+import static com.jaspersoft.android.retrofit.sdk.database.JasperSdkDatabase.DEFAULT_ENDPOINT;
+import static com.jaspersoft.android.retrofit.sdk.database.JasperSdkDatabase.DEFAULT_ORGANIZATION;
 import static rx.android.app.AppObservable.bindFragment;
 
 /**
@@ -55,8 +57,6 @@ import static rx.android.app.AppObservable.bindFragment;
  */
 public class AuthenticatorFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final String DEFAULT_ENDPOINT = "http://mobiledemo.jaspersoft.com/jasperserver-pro";
-    private static final String DEFAULT_ORGANIZATION = "organization_1";
     private static final String DEFAULT_USERNAME = "phoneuser";
     private static final String DEFAULT_PASSWORD = "phoneuser";
 

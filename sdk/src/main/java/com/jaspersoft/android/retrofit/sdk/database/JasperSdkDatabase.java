@@ -7,9 +7,11 @@ import android.os.Build;
 
 import com.jaspersoft.android.retrofit.sdk.database.table.JasperServerTable;
 import com.jaspersoft.android.retrofit.sdk.model.JasperServer;
-import com.jaspersoft.android.retrofit.sdk.util.JasperSettings;
 
 public class JasperSdkDatabase extends SQLiteOpenHelper {
+    public static final String DEFAULT_ENDPOINT = "http://mobiledemo.jaspersoft.com/jasperserver-pro";
+    public static final String DEFAULT_ORGANIZATION = "organization_1";
+
     public static final boolean FOREIGN_KEYS_SUPPORTED = Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO;
     private static final String DATABASE_NAME = "jasper_sdk.db";
     private static final int DATABASE_VERSION = 1;
@@ -57,7 +59,8 @@ public class JasperSdkDatabase extends SQLiteOpenHelper {
     private void insertDefaultServer(SQLiteDatabase db) {
         JasperServer jasperServer = new JasperServer()
                 .withAlias("Jasper Mobile")
-                .withServerUrl(JasperSettings.DEFAULT_ENDPOINT);
+                .withOrganization(DEFAULT_ORGANIZATION)
+                .withServerUrl(DEFAULT_ENDPOINT);
         db.insert(JasperServerTable.TABLE_NAME, null, jasperServer.getContentValues());
     }
 }

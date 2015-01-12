@@ -12,7 +12,6 @@ public class JasperSettings {
     public static final String ACTION_LIST_SERVERS = "jaspersoft.settings.LIST_SERVERS_SETTINGS";
 
     // REST constants
-    public static final String DEFAULT_ENDPOINT = "http://mobiledemo.jaspersoft.com/jasperserver-pro";
     public static final String DEFAULT_REST_VERSION = "/rest_v2";
 
     private JasperSettings() {
