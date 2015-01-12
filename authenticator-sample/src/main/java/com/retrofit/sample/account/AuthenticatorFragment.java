@@ -6,7 +6,7 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.retrofit.sample;
+package com.retrofit.sample.account;
 
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
@@ -33,6 +33,7 @@ import com.jaspersoft.android.retrofit.sdk.ojm.ServerInfo;
 import com.jaspersoft.android.retrofit.sdk.rest.BasicAccountDataStorage;
 import com.jaspersoft.android.retrofit.sdk.rest.JsRestClient;
 import com.jaspersoft.android.retrofit.sdk.rest.response.LoginResponse;
+import com.retrofit.sample.R;
 import com.retrofit.sample.database.JasperSdkDatabase;
 import com.retrofit.sample.database.table.JasperServerTable;
 import com.retrofit.sample.provider.JasperSdkProvider;

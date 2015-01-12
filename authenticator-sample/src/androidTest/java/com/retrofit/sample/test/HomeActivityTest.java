@@ -5,6 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.retrofit.sample.HomeActivity;
+import com.retrofit.sample.R;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,7 +17,6 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.jaspersoft.android.retrofit.sdk.R.id.tryDemo;
 
 @RunWith(AndroidJUnit4.class)
 public class HomeActivityTest extends ActivityInstrumentationTestCase2<HomeActivity> {
@@ -46,7 +46,7 @@ public class HomeActivityTest extends ActivityInstrumentationTestCase2<HomeActiv
 
     @Test
     public void testTryDemo() {
-        onView(withId(tryDemo)).perform(click());
+        onView(withId(R.id.tryDemo)).perform(click());
         onView(withId(R.id.intro)).check(matches(withText(R.string.hello_world)));
     }
 

@@ -1,4 +1,4 @@
-package com.retrofit.sample.account;
+package com.retrofit.sample.auth;
 
 import android.app.Service;
 import android.content.Intent;

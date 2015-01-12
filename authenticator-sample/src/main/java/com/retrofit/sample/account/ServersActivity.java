@@ -1,14 +1,17 @@
-package com.retrofit.sample;
+package com.retrofit.sample.account;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.retrofit.sample.R;
 
 /**
  * @author Tom Koptel
  * @since 2.0
  */
-public class ServersActivity extends BaseActivity {
+public class ServersActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

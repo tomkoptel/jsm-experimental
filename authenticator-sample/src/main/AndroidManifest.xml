@@ -32,12 +32,12 @@
 
         <!-- SDK external components -->
         <activity
-            android:name=".AuthenticatorActivity"
+            android:name=".account.AuthenticatorActivity"
             android:label="@string/title_activity_login"/>
 
-        <activity android:name=".ServersActivity"/>
+        <activity android:name=".account.ServersActivity"/>
 
-        <service android:name=".account.JasperAuthenticatorService">
+        <service android:name=".auth.JasperAuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
