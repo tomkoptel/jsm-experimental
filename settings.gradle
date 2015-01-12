@@ -1,4 +1,4 @@
-include ':authenticator-sample'
+include ':authenticator-sample', ':unit-tests'
 include ':stateless-viewpager'
 include ':sdk'
 include ':rest'
