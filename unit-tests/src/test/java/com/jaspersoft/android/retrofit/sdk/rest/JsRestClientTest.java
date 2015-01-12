@@ -9,6 +9,7 @@
 package com.jaspersoft.android.retrofit.sdk.rest;
 
 import com.jaspersoft.android.retrofit.sdk.ojm.ServerInfo;
+import com.jaspersoft.android.retrofit.sdk.rest.service.AccountService;
 import com.jaspersoft.android.retrofit.sdk.support.UnitTestSpecification;
 
 import org.junit.Before;

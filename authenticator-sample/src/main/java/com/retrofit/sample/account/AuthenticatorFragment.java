@@ -30,7 +30,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.jaspersoft.android.retrofit.sdk.ojm.ServerInfo;
-import com.jaspersoft.android.retrofit.sdk.rest.BasicAccountDataStorage;
+import com.jaspersoft.android.retrofit.sdk.account.BasicAccountDataStorage;
 import com.jaspersoft.android.retrofit.sdk.rest.JsRestClient;
 import com.jaspersoft.android.retrofit.sdk.rest.response.LoginResponse;
 import com.retrofit.sample.R;

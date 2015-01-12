@@ -8,6 +8,7 @@
 
 package com.jaspersoft.android.retrofit.sdk.rest;
 
+import com.jaspersoft.android.retrofit.sdk.account.BasicAccountDataStorage;
 import com.jaspersoft.android.retrofit.sdk.support.UnitTestSpecification;
 
 import org.junit.Before;

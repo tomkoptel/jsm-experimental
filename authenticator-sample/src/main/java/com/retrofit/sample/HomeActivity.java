@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
-import com.jaspersoft.android.retrofit.sdk.rest.BasicAccountDataStorage;
+import com.jaspersoft.android.retrofit.sdk.account.BasicAccountDataStorage;
 import com.retrofit.sample.account.AuthenticatorActivity;
 import com.retrofit.sample.util.JasperAuthUtil;
 

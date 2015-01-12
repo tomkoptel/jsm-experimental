@@ -6,17 +6,11 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.jaspersoft.android.retrofit.sdk.rest;
+package com.jaspersoft.android.retrofit.sdk.token;
 
 /**
- * @author Tom Koptel
- * @since 2.0
+ * Created by samsung on 1/10/15.
  */
-public interface AccountDataStorage {
-    void setServerCookie(String cookieValue);
-    String getServerCookie();
-    void setServerVersion(String versionName);
-    String getServerVersion();
-    void setServerEdition(String editionName);
-    String getServerEdition();
+public interface AccessTokenEncoder {
+    String encodeToken();
 }

@@ -6,7 +6,7 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.jaspersoft.android.retrofit.sdk.rest;
+package com.jaspersoft.android.retrofit.sdk.account;
 
 import android.app.Activity;
 import android.content.Context;

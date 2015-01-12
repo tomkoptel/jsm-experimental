@@ -1,4 +1,4 @@
-package com.jaspersoft.android.retrofit.sdk.rest;
+package com.jaspersoft.android.retrofit.sdk.rest.service;
 
 
 import com.jaspersoft.android.retrofit.sdk.ojm.ServerInfo;

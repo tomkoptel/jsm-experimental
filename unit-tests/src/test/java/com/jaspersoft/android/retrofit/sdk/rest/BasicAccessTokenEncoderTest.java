@@ -11,6 +11,7 @@ package com.jaspersoft.android.retrofit.sdk.rest;
 import android.util.Base64;
 
 import com.jaspersoft.android.retrofit.sdk.support.UnitTestSpecification;
+import com.jaspersoft.android.retrofit.sdk.token.BasicAccessTokenEncoder;
 
 import org.junit.Test;
 
