@@ -1,12 +1,12 @@
-package com.jaspersoft.android.retrofit.sdk.database;
+package com.retrofit.sample.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 
-import com.jaspersoft.android.retrofit.sdk.database.table.JasperServerTable;
-import com.jaspersoft.android.retrofit.sdk.model.JasperServer;
+import com.retrofit.sample.database.table.JasperServerTable;
+import com.retrofit.sample.model.JasperServer;
 
 public class JasperSdkDatabase extends SQLiteOpenHelper {
     public static final String DEFAULT_ENDPOINT = "http://mobiledemo.jaspersoft.com/jasperserver-pro";

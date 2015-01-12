@@ -34,10 +34,6 @@ android {
 
 dependencies {
     compile project(":rest")
-    compile 'com.jakewharton.timber:timber:2.5.0'
-
     compile 'io.reactivex:rxandroid:0.24.0'
-    compile 'io.reactivex:rxandroid-framework:0.24.0'
-
     compile 'com.squareup.retrofit:retrofit:1.8.0'
 }

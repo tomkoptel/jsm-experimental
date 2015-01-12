@@ -6,7 +6,7 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.jaspersoft.android.retrofit.sdk;
+package com.retrofit.sample;
 
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
@@ -29,14 +29,15 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.jaspersoft.android.retrofit.sdk.database.table.JasperServerTable;
 import com.jaspersoft.android.retrofit.sdk.ojm.ServerInfo;
-import com.jaspersoft.android.retrofit.sdk.provider.JasperSdkProvider;
 import com.jaspersoft.android.retrofit.sdk.rest.BasicAccountDataStorage;
 import com.jaspersoft.android.retrofit.sdk.rest.JsRestClient;
 import com.jaspersoft.android.retrofit.sdk.rest.response.LoginResponse;
-import com.jaspersoft.android.retrofit.sdk.util.JasperAuthUtil;
-import com.jaspersoft.android.retrofit.sdk.util.JasperSettings;
+import com.retrofit.sample.database.JasperSdkDatabase;
+import com.retrofit.sample.database.table.JasperServerTable;
+import com.retrofit.sample.provider.JasperSdkProvider;
+import com.retrofit.sample.util.AppSettings;
+import com.retrofit.sample.util.JasperAuthUtil;
 
 import rx.Observable;
 import rx.Subscription;
@@ -46,8 +47,7 @@ import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 import rx.subscriptions.Subscriptions;
 
-import static com.jaspersoft.android.retrofit.sdk.database.JasperSdkDatabase.DEFAULT_ENDPOINT;
-import static com.jaspersoft.android.retrofit.sdk.database.JasperSdkDatabase.DEFAULT_ORGANIZATION;
+import static com.retrofit.sample.database.JasperSdkDatabase.DEFAULT_ENDPOINT;
 import static rx.android.app.AppObservable.bindFragment;
 
 /**
@@ -109,7 +109,7 @@ public class AuthenticatorFragment extends Fragment implements LoaderManager.Loa
                 .build();
 
         Observable<LoginResponse> demoLoginObservable =
-                jsRestClient.login(DEFAULT_ORGANIZATION, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+                jsRestClient.login(JasperSdkDatabase.DEFAULT_ORGANIZATION, DEFAULT_USERNAME, DEFAULT_PASSWORD);
         tryDemoTask = bindFragment(this, demoLoginObservable.cache());
     }
 
@@ -128,7 +128,7 @@ public class AuthenticatorFragment extends Fragment implements LoaderManager.Loa
         profiles.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View view, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    startActivity(new Intent(JasperSettings.ACTION_LIST_SERVERS));
+                    startActivity(new Intent(AppSettings.ACTION_LIST_SERVERS));
                 }
                 return true;
             }

@@ -1,4 +1,4 @@
-package com.jaspersoft.android.retrofit.sdk.account;
+package com.retrofit.sample.account;
 
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;
@@ -9,7 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.jaspersoft.android.retrofit.sdk.util.JasperSettings;
+import com.retrofit.sample.util.AppSettings;
 
 /**
  * @author Tom Koptel
@@ -31,7 +31,7 @@ public class JasperAuthenticator extends AbstractAccountAuthenticator {
     @Override
     public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
 
-        final Intent intent = new Intent(JasperSettings.ACTION_AUTHORIZE);
+        final Intent intent = new Intent(AppSettings.ACTION_AUTHORIZE);
 //        intent.putExtra(AuthenticatorActivity.ARG_ACCOUNT_TYPE, accountType);
 //        intent.putExtra(AuthenticatorActivity.ARG_AUTH_TYPE, authTokenType);
 //        intent.putExtra(AuthenticatorActivity.ARG_IS_ADDING_NEW_ACCOUNT, true);

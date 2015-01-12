@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.retrofit.sample.authenticator">
+    package="com.retrofit.sample">
 
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
@@ -13,11 +13,11 @@
     -->
     <instrumentation
         android:name="android.support.test.runner.AndroidJUnitRunner"
-        android:targetPackage="com.retrofit.sample.authenticator.test" />
+        android:targetPackage="com.retrofit.sample.test" />
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_add_server"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
 
@@ -32,22 +32,12 @@
 
         <!-- SDK external components -->
         <activity
-            android:name="com.jaspersoft.android.retrofit.sdk.AuthenticatorActivity"
-            android:label="@string/title_activity_login">
-            <intent-filter>
-                <action android:name="jaspersoft.settings.AUTHORIZE_SETTINGS" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+            android:name=".AuthenticatorActivity"
+            android:label="@string/title_activity_login"/>
 
-        <activity android:name="com.jaspersoft.android.retrofit.sdk.ServersActivity">
-            <intent-filter>
-                <action android:name="jaspersoft.settings.LIST_SERVERS_SETTINGS" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".ServersActivity"/>
 
-        <service android:name="com.jaspersoft.android.retrofit.sdk.account.JasperAuthenticatorService">
+        <service android:name=".account.JasperAuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -57,7 +47,7 @@
         </service>
 
         <provider
-            android:name="com.jaspersoft.android.retrofit.sdk.provider.JasperSdkProvider"
+            android:name=".provider.JasperSdkProvider"
             android:authorities="com.jaspersoft.android.retrofit.sdk.provider"
             android:exported="false" />
     </application>

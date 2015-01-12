@@ -1,11 +1,11 @@
-package com.jaspersoft.android.retrofit.sdk.model;
+package com.retrofit.sample.model;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.jaspersoft.android.retrofit.sdk.database.table.JasperServerTable;
+import com.retrofit.sample.database.table.JasperServerTable;
 
 import java.util.ArrayList;
 import java.util.List;

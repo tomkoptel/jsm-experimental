@@ -5,8 +5,6 @@ import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.retrofit.sample.HomeActivity;
-import com.retrofit.sample.authenticator.HomeActivity;
-import com.retrofit.sample.authenticator.R;
 
 import org.junit.After;
 import org.junit.Before;

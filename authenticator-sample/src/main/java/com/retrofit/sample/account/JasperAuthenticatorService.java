@@ -1,4 +1,4 @@
-package com.jaspersoft.android.retrofit.sdk.account;
+package com.retrofit.sample.account;
 
 import android.app.Service;
 import android.content.Intent;

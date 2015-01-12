@@ -11,8 +11,7 @@ import android.os.Handler;
 import android.widget.Toast;
 
 import com.jaspersoft.android.retrofit.sdk.rest.BasicAccountDataStorage;
-import com.jaspersoft.android.retrofit.sdk.util.JasperAuthUtil;
-import com.jaspersoft.android.retrofit.sdk.util.JasperSettings;
+import com.retrofit.sample.util.JasperAuthUtil;
 
 
 public class HomeActivity extends Activity {
@@ -52,7 +51,7 @@ public class HomeActivity extends Activity {
     }
 
     private void addAccount() {
-        Intent intent = new Intent(JasperSettings.ACTION_AUTHORIZE);
+        Intent intent = new Intent(this, AuthenticatorActivity.class);
         intent.putExtra("account_types", new String[]{"com.jaspersoft"});
         startActivityForResult(intent, 10);
     }

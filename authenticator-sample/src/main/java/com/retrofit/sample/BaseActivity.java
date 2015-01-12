@@ -1,4 +1,4 @@
-package com.jaspersoft.android.retrofit.sdk;
+package com.retrofit.sample;
 
 import android.app.Activity;
 

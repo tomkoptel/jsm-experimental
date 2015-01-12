@@ -1,4 +1,4 @@
-package com.jaspersoft.android.retrofit.sdk.util;
+package com.retrofit.sample.util;
 
 /**
  * @author Tom Koptel

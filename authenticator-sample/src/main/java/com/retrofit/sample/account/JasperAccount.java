@@ -1,9 +1,9 @@
-package com.jaspersoft.android.retrofit.sdk.account;
+package com.retrofit.sample.account;
 
 import android.accounts.Account;
 import android.text.TextUtils;
 
-import com.jaspersoft.android.retrofit.sdk.model.JasperServer;
+import com.retrofit.sample.model.JasperServer;
 
 /**
  * @author Tom Koptel

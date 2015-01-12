@@ -1,4 +1,4 @@
-package com.jaspersoft.android.retrofit.sdk.database.table;
+package com.retrofit.sample.database.table;
 
 public interface JasperServerTable {
     String TABLE_NAME = "jasper_server";

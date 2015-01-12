@@ -1,4 +1,4 @@
-package com.jaspersoft.android.retrofit.sdk.provider;
+package com.retrofit.sample.provider;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -11,8 +11,8 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.text.TextUtils;
 
-import com.jaspersoft.android.retrofit.sdk.database.JasperSdkDatabase;
-import com.jaspersoft.android.retrofit.sdk.database.table.JasperServerTable;
+import com.retrofit.sample.database.JasperSdkDatabase;
+import com.retrofit.sample.database.table.JasperServerTable;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.jaspersoft.android.retrofit.sdk;
+package com.retrofit.sample;
 
 import android.accounts.AccountAuthenticatorActivity;
 import android.os.Bundle;
